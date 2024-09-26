@@ -42,4 +42,8 @@ a {
 } */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 
+.highlight {
+  background-color: rgb(255, 0, 0);
+  color: black;
+}
 /* Add any global styles below */

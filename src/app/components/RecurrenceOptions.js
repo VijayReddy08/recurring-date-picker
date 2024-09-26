@@ -12,7 +12,7 @@ export default function RecurrenceOptions() {
   return (
     <div className="mt-4">
       <label className="form-label">Select Recurrence:</label>
-      <select className="form-select" value={recurrence} onChange={handleRecurrenceChange}>
+      <select className="form-select"  onChange={handleRecurrenceChange} defaultValue="daily">
         <option value="none">None</option>
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>

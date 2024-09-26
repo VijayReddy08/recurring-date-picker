@@ -1,42 +1,78 @@
-// src/app/components/CalendarPreview.js
-"use client"; // It's for future changes
+"use client";
+
+import '@/app/styles/globals.css'
+import React, { useEffect, useState } from "react";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
 import { useDateContext } from "../context/DateContext";
 
 export default function CalendarPreview() {
-  const { startDate, recurrence, customValue } = useDateContext();
+  const { recurrence, setStartDate } = useDateContext();
+  const [highlightedDates, setHighlightedDates] = useState([]);
 
-  // A simple demonstration of how to use the recurrence.
-  const generateDates = () => {
-    if (!startDate || recurrence === "none") return [];
+  const [currentDate, setCurrentDate] = useState(new Date()); // Initialize with today's date
 
-    const dates = [];
-    const start = new Date(startDate);
-    const daysInWeek = 7;
-
-    for (let i = 0; i < 12; i++) {
-      let newDate = new Date(start);
-      if (recurrence === "daily") {
-        newDate.setDate(start.getDate() + i * customValue);
-      } else if (recurrence === "weekly") {
-        newDate.setDate(start.getDate() + i * daysInWeek * customValue);
-      } else if (recurrence === "monthly") {
-        newDate.setMonth(start.getMonth() + i * customValue);
-      } else if (recurrence === "yearly") {
-        newDate.setFullYear(start.getFullYear() + i * customValue);
-      }
-      dates.push(newDate.toDateString());
+  useEffect(() => {
+    if (currentDate) {
+      const generatedDates = generateDates(currentDate, recurrence);
+      setHighlightedDates(generatedDates);
     }
+  }, [currentDate, recurrence]);
+
+  const generateDates = (start, recurrenceType) => {
+    let dates = [];
+    let currentDate = new Date(start);
+    let endDate = new Date(start);
+    endDate.setMonth(currentDate.getMonth() + 1); // Example: Limiting to 3 months ahead
+
+    while (currentDate <= endDate) {
+      dates.push(new Date(currentDate));
+      incrementDate(currentDate, recurrenceType);
+    }
+
     return dates;
+  };
+
+  const incrementDate = (date, recurrenceType) => {
+    switch (recurrenceType) {
+      case 'daily':
+        setCurrentDate(date.setDate(date.getDate() + 1));
+        break;
+      case 'weekly':
+        setCurrentDate(date.setDate(date.getDate() + 1));
+        break;
+      case 'monthly':
+        setCurrentDate(date.setDate(date.getDate() + 1));
+        break;
+    }
+  };
+
+  const tileClassName = ({ date, view }) => {
+    if (view === 'month') {
+      return highlightedDates.some(highlightedDate =>
+        highlightedDate.toDateString() === date.toDateString()) ? 'highlight' : null;
+    }
+  };
+
+  const onDateClick = (value, event) => {
+    setCurrentDate(value);
+    setStartDate(value); // Assuming this function updates context or parent state
   };
 
   return (
     <div className="mt-4">
-      <h5>Preview of Recurring Dates:</h5>
-      <ul>
-        {generateDates().map((date, index) => (
-          <li key={index}>{date}</li>
-        ))}
-      </ul>
+      <h5>Recurring Dates Preview:</h5>
+      <Calendar
+        onChange={onDateClick}
+        value={currentDate}
+        tileClassName={tileClassName}
+      />
+      {/* <style jsx>{`
+        .highlight {
+          background-color: #ffcccb; // Adjust the highlight color if needed
+          color: black;
+        }
+      `}</style> */}
     </div>
   );
 }

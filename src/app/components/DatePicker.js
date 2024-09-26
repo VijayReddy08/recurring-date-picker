@@ -6,13 +6,13 @@ import RecurrenceOptions from "./RecurrenceOptions";
 import CalendarPreview from "./CalendarPreview";
 
 export default function DatePicker() {
-  const { startDate, setStartDate } = useDateContext();
+  // const { startDate, setStartDate } = useDateContext();
 
-  const handleDateChange = (e) => setStartDate(e.target.value);
+  // const handleDateChange = (e) => setStartDate(e.target.value);
 
   return (
     <div className="mb-4">
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="startDate">Select Start Date:</label>
         <input
           type="date"
@@ -21,7 +21,7 @@ export default function DatePicker() {
           value={startDate}
           onChange={handleDateChange}
         />
-      </div>
+      </div> */}
       <RecurrenceOptions />
       <CalendarPreview />
     </div>
